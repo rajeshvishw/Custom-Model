@@ -28,7 +28,7 @@ def registration_view(request):
     if request.method == 'POST':
         phone_number = request.POST.get('phone_number')
         email = request.POST.get('email')
-        password = make_password(request.POST.get('password'))  # Password ko hash karein
+        password = make_password(request.POST.get('password'))  # Password ko hash hoga yaha pe
         user_bio = request.POST.get('user_bio')
         user_profile_image = request.FILES.get('user_profile_image')
 
@@ -43,6 +43,10 @@ def registration_view(request):
         else:
             issuperuser = 0
         # Create a new CustomUser object
+        userss = CustomUser.objects.filter(phone_number = phone_number)
+        if userss:
+            warning = "Phone number must be unique"
+            return render(request, 'registration.html',{"warning":warning})
         user = CustomUser(
             phone_number=phone_number,
             email=email,
